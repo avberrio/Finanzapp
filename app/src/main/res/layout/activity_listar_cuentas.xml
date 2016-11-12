@@ -14,17 +14,47 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp"
-        android:title="Dashboard"
-        app:title="Dashboard"
+        app:title="Listar Cuentas"
         app:theme="@style/ToolBarTheme"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
+        app:popupTheme="@style/PopupThemeOverlayTheme">
 
 
     </android.support.v7.widget.Toolbar>
 
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:layout_below="@id/my_toolbar">
+
+        <TextView
+            android:id="@+id/bills_to_pay_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Cuentas a pagar durante los próximos X días"/>
+
+        <ListView
+            android:id="@+id/myListView"
+            android:layout_below="@id/bills_to_pay_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="#CCCCCC"
+            android:dividerHeight="1dp">
+
+        </ListView>
+
+        <TextView
+            android:id="@+id/total_to_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/myListView"
+            android:textSize="20sp"
+            android:text="Hasta el Y, el total a pagar son Z"/>
+
+    </RelativeLayout>
+
 </RelativeLayout>
