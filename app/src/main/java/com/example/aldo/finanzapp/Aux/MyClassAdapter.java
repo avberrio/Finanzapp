@@ -1,25 +1,18 @@
-package com.example.aldo.finanzapp;
+package com.example.aldo.finanzapp.Aux;
 
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import com.example.aldo.finanzapp.Models.Bills;
+import com.example.aldo.finanzapp.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MyClassAdapter extends ArrayAdapter {
 
@@ -59,7 +52,7 @@ public class MyClassAdapter extends ArrayAdapter {
         billNameLabel.setText("Nombre: " + items.get(position).getBillName());
 
         TextView billValueLabel = (TextView) rowView.findViewById(R.id.value);
-        billValueLabel.setText("Valor: $" + Integer.toString(items.get(position).getValue()));
+        billValueLabel.setText("Valor: $" + items.get(position).getValue());
 
         TextView billFinisDateLabel = (TextView) rowView.findViewById(R.id.finish_date);
         billFinisDateLabel.setText("Fecha: " + items.get(position).getFinishDate());
