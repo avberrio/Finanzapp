@@ -1,4 +1,4 @@
-package com.example.aldo.finanzapp.Models;
+package com.example.aldo.finanzapp.models;
 
 public class BillsClass {
     private String billName;

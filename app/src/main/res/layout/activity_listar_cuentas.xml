@@ -5,7 +5,7 @@
     android:id="@+id/activity_listar_cuentas"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.aldo.finanzapp.Views.ListarCuentas">
+    tools:context="com.example.aldo.finanzapp.activities.ListarCuentas">
 
 
 

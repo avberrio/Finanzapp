@@ -1,12 +1,12 @@
-package com.example.aldo.finanzapp.Models;
+package com.example.aldo.finanzapp.models;
 
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static com.example.aldo.finanzapp.Models.BillsDAO.BILL_TABLE_CREATE;
-import static com.example.aldo.finanzapp.Models.BillsDAO.BILL_TABLE_DROP;
+import static com.example.aldo.finanzapp.models.BillsDAO.BILL_TABLE_CREATE;
+import static com.example.aldo.finanzapp.models.BillsDAO.BILL_TABLE_DROP;
 
 /**
  * Created by Mathieu on 30/08/2016.

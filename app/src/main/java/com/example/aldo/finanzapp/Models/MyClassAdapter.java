@@ -1,4 +1,4 @@
-package com.example.aldo.finanzapp.Models;
+package com.example.aldo.finanzapp.models;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import android.widget.ArrayAdapter;
 
-import com.example.aldo.finanzapp.Models.Bills;
 import com.example.aldo.finanzapp.R;
 
 import java.util.ArrayList;

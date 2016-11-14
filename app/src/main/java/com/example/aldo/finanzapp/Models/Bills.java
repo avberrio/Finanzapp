@@ -1,4 +1,4 @@
-package com.example.aldo.finanzapp.Models;
+package com.example.aldo.finanzapp.models;
 
 /**
  * Created by aldo on 13-11-16.

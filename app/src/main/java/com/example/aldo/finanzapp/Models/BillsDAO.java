@@ -1,4 +1,4 @@
-package com.example.aldo.finanzapp.Models;
+package com.example.aldo.finanzapp.models;
 
 /**
  * Created by aldo on 13-11-16.
@@ -8,27 +8,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-
-
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
-
-
-
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import static android.provider.MediaStore.Video.VideoColumns.CATEGORY;
 
 /**
  * Created by Mathieu on 30/08/2016.
@@ -119,99 +100,5 @@ public class BillsDAO {
         cursor.close();
         return bills_array;
     }
-
-
-    /**
-     * Compose JSON out of SQLite records
-     *
-     */
-    /*
-    public String composeTaskJSONfromSQLite(String mail, String name){
-        ArrayList<HashMap<String, String>> wordList = new ArrayList<HashMap<String, String>>();
-        String selectQuery = "SELECT * FROM " +TASK_TABLE_NAME+" WHERE "+UPDATE_STATUS+" = '"+"no"+"'";
-        this.open();
-        //mDb = dBHelper.getWritableDatabase();
-        Cursor cursor = mDb.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("mail", mail);
-                map.put("name", name);
-                map.put(KEY, cursor.getString(0));
-                map.put(BILLS_NAME, cursor.getString(1));
-                if (cursor.getString(2) != null){
-                    map.put(VALUE, cursor.getString(2));
-                }
-                wordList.add(map);
-            } while (cursor.moveToNext());
-        }
-        //this.close();
-        cursor.close();
-
-        Gson gson = new GsonBuilder().create();
-        //Use GSON to serialize Array List to JSON
-        return gson.toJson(wordList);
-    }
-    */
-
-    /*
-    public String composeMailJSON(String mail){
-        ArrayList<HashMap<String, String>> wordList = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("mail", mail);
-        wordList.add(map);
-        Gson gson = new GsonBuilder().create();
-        //Use GSON to serialize Array List to JSON
-        return gson.toJson(wordList);
-    }
-    */
-
-    /**
-     * Get Sync status of SQLite
-     * @return
-     */
-    public String getSyncStatus(){
-        String msg = null;
-        if(this.dbSyncCount() == 0){
-            msg = "SQLite and Remote MySQL DBs are in Sync!";
-        }else{
-            msg = "DB Sync needed\n";
-        }
-        return msg;
-    }
-
-    /**
-     * Get SQLite records that are yet to be Synced
-     * @return
-     */
-    public int dbSyncCount(){
-        int count = 0;
-        String selectQuery = "SELECT  * FROM "+BILL_TABLE_NAME+ " where " +UPDATE_STATUS+" = '"+"no"+"'";
-        this.open();
-        //SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = mDb.rawQuery(selectQuery, null);
-        count = cursor.getCount();
-        //this.close();
-        return count;
-    }
-
-    /**
-     * Update Sync status against each User ID
-     * @param id
-     * @param status
-     */
-    /*
-    public void updateSyncStatus(String id, String status, String idExternDB){
-        //SQLiteDatabase database = this.getWritableDatabase();
-        this.open();
-        String updateQuery = "Update " + BILL_TABLE_NAME+" set " +UPDATE_STATUS+" = '"+ status +"' where "+KEY+"="+"'"+ id +"'";
-        String updateQuery2 = "Update " + BILL_TABLE_NAME+" set " +KEY_EXTERN_DB+" = '"+ idExternDB +"' where "+KEY+"="+"'"+ id +"'";
-        Log.d("query update status : ",updateQuery);
-        Log.d("query update id_ext : ",updateQuery2);
-        mDb.execSQL(updateQuery);
-        mDb.execSQL(updateQuery2);
-        //this.close();
-    }
-    */
 
 }
