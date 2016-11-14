@@ -1,18 +1,25 @@
 package com.example.aldo.finanzapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.aldo.finanzapp.R;
+import com.example.aldo.finanzapp.models.Bills;
+import com.example.aldo.finanzapp.models.BillsDAO;
 
 /**
  * Created by Mathieu on 29/08/2016.
  */
 
 public class AddExpenseActivity extends AppCompatActivity {
+
+    private BillsDAO billsDAO;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -39,6 +46,28 @@ public class AddExpenseActivity extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.nav_valid){
+            EditText editTitle = (EditText) findViewById(R.id.input_text_expense_title);
+            String title = editTitle.getText().toString();
+            EditText editAmount = (EditText) findViewById(R.id.input_text_amount);
+            String amount = editAmount.getText().toString();
+            EditText editDescription = (EditText) findViewById(R.id.input_text_description);
+            String description = editDescription.getText().toString();
+
+            // If the title is empty
+            if (title.equals("")){
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(this, " entrar un titulo ", duration);
+                toast.show();
+            }
+            else{
+                billsDAO = new BillsDAO(this);
+                billsDAO.open();
+                Bills bills = new Bills(title,amount,"01/01/2017",description);
+                billsDAO.createBill(bills);
+                Intent intent = new Intent(AddExpenseActivity.this,ListarCuentas.class);
+                startActivity(intent);
+            }
+
             return true;
         }
         return super.onOptionsItemSelected(item);

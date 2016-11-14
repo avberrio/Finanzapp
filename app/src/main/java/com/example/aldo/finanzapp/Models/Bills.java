@@ -8,14 +8,14 @@ public class Bills {
 
     private long id;
     private String billName;
-    private String value;
+    private String amount;
     private String finishDate;
     private String description;
     private String updateStatus;
 
     public Bills (String billName, String value, String finishDate, String description){
         this.billName = billName;
-        this.value = value;
+        this.amount = value;
         this.finishDate = finishDate;
         this.description = description;
 
@@ -39,12 +39,12 @@ public class Bills {
         this.billName = billName;
     }
 
-    public String getValue () {
-        return value;
+    public String getAmount() {
+        return amount;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
     public String getFinishDate () {

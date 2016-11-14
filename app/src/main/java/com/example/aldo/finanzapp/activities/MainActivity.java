@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_dashboard) {
             // Handle the camera action
         } else if (id == R.id.nav_cuentas) {
+            Intent itent = new Intent(MainActivity.this, ListarCuentas.class);
+            startActivity(itent);
 
         } else if (id == R.id.nav_calendar) {
 

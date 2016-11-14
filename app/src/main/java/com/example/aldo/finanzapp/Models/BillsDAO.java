@@ -55,7 +55,7 @@ public class BillsDAO {
     public void createBill (Bills bill){
         ContentValues values = new ContentValues();
         values.put(BILLS_NAME, bill.getBillName());
-        values.put(VALUE, bill.getValue());
+        values.put(VALUE, bill.getAmount());
         values.put(FINISH_DATE, bill.getFinishDate());
         values.put(DESCRIPTION, bill.getDescription());
         long insertId = mDb.insert(BILL_TABLE_NAME, null, values);

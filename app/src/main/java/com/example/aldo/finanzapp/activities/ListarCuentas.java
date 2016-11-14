@@ -25,10 +25,10 @@ public class ListarCuentas extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_cuentas);
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24px);   /* Back button in left of action bar */
-        setSupportActionBar(myToolbar);
+        android.support.v7.widget.Toolbar toolbar_list = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_list);
+        setSupportActionBar(toolbar_list);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         /*
         billsList = new ArrayList<Bills>();
@@ -59,7 +59,9 @@ public class ListarCuentas extends AppCompatActivity {
             case R.id.action_settings:
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
-
+            case android.R.id.home:
+                onBackPressed();
+                return true;
 
             default:
                 // If we got here, the user's action was not recognized.

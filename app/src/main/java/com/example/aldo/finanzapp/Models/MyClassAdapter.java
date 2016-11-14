@@ -49,8 +49,8 @@ public class MyClassAdapter extends ArrayAdapter {
         TextView billNameLabel = (TextView) rowView.findViewById(R.id.billsName);
         billNameLabel.setText("Nombre: " + items.get(position).getBillName());
 
-        TextView billValueLabel = (TextView) rowView.findViewById(R.id.value);
-        billValueLabel.setText("Valor: $" + items.get(position).getValue());
+        TextView billValueLabel = (TextView) rowView.findViewById(R.id.amount);
+        billValueLabel.setText("Valor: $" + items.get(position).getAmount());
 
         TextView billFinisDateLabel = (TextView) rowView.findViewById(R.id.finish_date);
         billFinisDateLabel.setText("Fecha: " + items.get(position).getFinishDate());
