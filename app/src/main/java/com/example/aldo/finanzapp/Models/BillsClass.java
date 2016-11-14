@@ -1,8 +1,4 @@
-package com.example.aldo.finanzapp.Aux;
-
-/**
- * Created by aldo on 11-11-16.
- */
+package com.example.aldo.finanzapp.Models;
 
 public class BillsClass {
     private String billName;

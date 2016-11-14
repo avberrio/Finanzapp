@@ -1,5 +1,4 @@
-package com.example.aldo.finanzapp.Aux;
-
+package com.example.aldo.finanzapp.Models;
 
 import android.content.Context;
 import android.view.LayoutInflater;
