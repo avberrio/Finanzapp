@@ -1,11 +1,14 @@
 package com.example.aldo.finanzapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.aldo.finanzapp.models.Bills;
@@ -14,12 +17,14 @@ import com.example.aldo.finanzapp.models.MyClassAdapter;
 import com.example.aldo.finanzapp.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ListarCuentas extends AppCompatActivity {
     ArrayList<Bills> billsList;
     MyClassAdapter newAdapter;
     BillsDAO billsDAO;
-    Bills bill;
+    private Bills bill;
+    private ArrayList<Bills> bills;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +35,8 @@ public class ListarCuentas extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        /*
-        billsList = new ArrayList<Bills>();
-        billsList.add(new Bills("Electricidad", 20000, "Viernes 28 de Octubre de 2016"));
-        billsList.add(new Bills("Agua", 15758, "Sabado 30 de Octubre de 2016"));
-        billsList.add(new Bills("Arriendo", 200000, "Viernes 4 de Noviembre de 2016"));
-        billsList.add(new Bills("Plan de Teléfono", 15990, "Viernes 11 de Noviembre de 2016"));
-        billsList.add(new Bills("Otros", 20000, "Viernes 28 de Octubre de 2016"));
-        billsList.add(new Bills("Más", 15758, "Sabado 30 de Octubre de 2016"));
-        */
-        bill = new Bills("Más", "15758", "Sabado 30 de Octubre de 2016", "Hola mundo");
         billsDAO = new BillsDAO(this);
         billsDAO.open();
-        billsDAO.createBill(bill);
         billsList = billsDAO.getAllTasks();
 
         newAdapter = new MyClassAdapter(this, billsList);
@@ -75,6 +69,25 @@ public class ListarCuentas extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return true;
+    }
+
+
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        for (Iterator<Bills> it = bills.iterator(); it.hasNext();) {
+            Bills itg = (Bills) it.next();
+            if (itg == (Bills) adapterView.getItemAtPosition(position)) {
+                BillsDAO billsDAO = new BillsDAO(this);
+
+                Intent intent = new Intent(ListarCuentas.this, EditExpenseActivity.class);
+                // Send expense data values to EditExpenseActivity
+                intent.putExtra("ExpenseId", itg.getId());
+                intent.putExtra("ExpenseTitle", itg.getBillName());
+                intent.putExtra("ExpenseAmount", itg.getAmount());
+                intent.putExtra("ExpenseDescription", itg.getDescription());
+
+                startActivity(intent);
+            }
+        }
     }
 
 
