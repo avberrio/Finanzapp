@@ -8,9 +8,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.example.aldo.finanzapp.models.Bills;
-import com.example.aldo.finanzapp.models.BillsDAO;
-import com.example.aldo.finanzapp.models.MyClassAdapter;
+import com.example.aldo.finanzapp.Models.Bills;
+import com.example.aldo.finanzapp.Models.BillsDAO;
+import com.example.aldo.finanzapp.Models.MyClassAdapter;
 import com.example.aldo.finanzapp.R;
 
 import java.util.ArrayList;
