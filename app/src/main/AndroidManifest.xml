@@ -21,6 +21,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activities.ListarCuentas"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.EditExpenseActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

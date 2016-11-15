@@ -19,19 +19,19 @@ public class BillsDAO {
     public static final String BILL_TABLE_NAME = "bill";
     public static final String KEY = "id";
     public static final String BILLS_NAME = "billsName";
-    public static final String VALUE = "value";
+    public static final String AMOUNT = "amount";
     public static final String FINISH_DATE = "finishDate";
     public static final String DESCRIPTION = "description";
     public static final String UPDATE_STATUS = "updateStatus";
 
 
     public static final String BILL_TABLE_CREATE = "CREATE TABLE " + BILL_TABLE_NAME + "(" + KEY +
-            " INTEGER PRIMARY KEY AUTOINCREMENT, " + BILLS_NAME + " TEXT, " + VALUE + " INTEGER, " +
+            " INTEGER PRIMARY KEY AUTOINCREMENT, " + BILLS_NAME + " TEXT, " + AMOUNT + " INTEGER, " +
             FINISH_DATE + " TEXT, " + DESCRIPTION + " TEXT);";
 
     public static final String BILL_TABLE_DROP = "DROP TABLE IF EXISTS " + BILL_TABLE_NAME + ";";
 
-    private String[] allColumns = {KEY, BILLS_NAME, VALUE, FINISH_DATE, DESCRIPTION};
+    private String[] allColumns = {KEY, BILLS_NAME, AMOUNT, FINISH_DATE, DESCRIPTION};
 
     protected DBHelper dBHelper = null;
     protected SQLiteDatabase mDb = null;
@@ -55,7 +55,7 @@ public class BillsDAO {
     public void createBill (Bills bill){
         ContentValues values = new ContentValues();
         values.put(BILLS_NAME, bill.getBillName());
-        values.put(VALUE, bill.getAmount());
+        values.put(AMOUNT, bill.getAmount());
         values.put(FINISH_DATE, bill.getFinishDate());
         values.put(DESCRIPTION, bill.getDescription());
         long insertId = mDb.insert(BILL_TABLE_NAME, null, values);
@@ -63,21 +63,16 @@ public class BillsDAO {
     }
 
 
-    public void updateTask (Bills bills, String oldTitle) {
-        /* Aun queda pendiente el solucionar el problema de la ID */
-        /*
-        ContentValues values = new ContentValues();
-        values.put(TITLE, task.getTitle());
-        values.put(CATEGORY, task.getCategory());
-        values.put(SHARE_WITH,task.getShareWith());
-        values.put(TASK_PREREQUISITE,task.getTaskPrerequisite());
-        values.put(DESCRIPTION,task.getDescription());
+    public void updateTask (Bills bill, String oldTitle) {
+               ContentValues values = new ContentValues();
+        values.put(BILLS_NAME, bill.getBillName());
+        values.put(AMOUNT, bill.getAmount());
+        values.put(FINISH_DATE,bill.getFinishDate());
+        values.put(DESCRIPTION,bill.getDescription());
         String[] whereArgs = new String[] {String.valueOf(oldTitle)};
-        /* Me must use KEY instead TITLE for sql update query. In same way, do to
-           deleteTask method
 
-        mDb.update(TASK_TABLE_NAME, values, TITLE + "=?", whereArgs);
-        */
+        mDb.update(BILL_TABLE_NAME, values, BILLS_NAME + "=?", whereArgs);
+
     }
 
 

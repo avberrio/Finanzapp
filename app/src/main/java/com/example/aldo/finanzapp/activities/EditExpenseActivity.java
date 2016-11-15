@@ -22,6 +22,7 @@ public class EditExpenseActivity extends AppCompatActivity {
 
     private BillsDAO billsDAO;
     private Bills bills;
+    private Bundle data;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,56 @@ public class EditExpenseActivity extends AppCompatActivity {
 
         TextView textViewTitleToolbar = (TextView) findViewById(R.id.toolbar_title);
         textViewTitleToolbar.setText("Modificar cuenta");
+
+        data  = getIntent().getExtras();
+        EditText editTitle = (EditText) findViewById(R.id.input_text_expense_title);
+        editTitle.setText(data.getString("ExpenseTitle"));
+        EditText editAmount = (EditText) findViewById(R.id.input_text_amount);
+        editAmount.setText(data.getString("ExpenseAmount"));
+        EditText editDescription = (EditText) findViewById(R.id.input_text_description);
+        editDescription.setText(data.getString("ExpenseDescription"));
+
+    }
+
+    public boolean onCreateOptionsMenu (Menu menu){
+        getMenuInflater().inflate(R.menu.activity_add_expense, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        else if (id == R.id.nav_valid){
+            EditText editTitle = (EditText) findViewById(R.id.input_text_expense_title);
+            String title = editTitle.getText().toString();
+            EditText editAmount = (EditText) findViewById(R.id.input_text_amount);
+            String amount = editAmount.getText().toString();
+            EditText editDescription = (EditText) findViewById(R.id.input_text_description);
+            String description = editDescription.getText().toString();
+
+            // If the title is empty
+            if (title.equals("")){
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(this, " entrar un titulo ", duration);
+                toast.show();
+            }
+            else{
+                billsDAO = new BillsDAO(this);
+                billsDAO.open();
+                Bills bills = new Bills(title,amount,"01/01/2017",description);
+                billsDAO.createBill(bills);
+                Intent intent = new Intent(EditExpenseActivity.this,ListarCuentas.class);
+                startActivity(intent);
+            }
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

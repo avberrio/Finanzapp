@@ -19,12 +19,13 @@ import com.example.aldo.finanzapp.R;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ListarCuentas extends AppCompatActivity {
-    ArrayList<Bills> billsList;
+public class ListarCuentas extends AppCompatActivity implements AdapterView.OnItemClickListener,
+        AdapterView.OnItemLongClickListener{
+    private ArrayList<Bills> billsList;
     MyClassAdapter newAdapter;
     BillsDAO billsDAO;
     private Bills bill;
-    private ArrayList<Bills> bills;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +41,9 @@ public class ListarCuentas extends AppCompatActivity {
         billsList = billsDAO.getAllTasks();
 
         newAdapter = new MyClassAdapter(this, billsList);
-        ListView listView = (ListView) findViewById(R.id.myListView);
+        listView = (ListView) findViewById(R.id.myListView);
         listView.setAdapter(newAdapter);
+        listView.setOnItemClickListener(this);
         newAdapter.notifyDataSetChanged();
 
 
@@ -71,9 +73,9 @@ public class ListarCuentas extends AppCompatActivity {
         return true;
     }
 
-
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        for (Iterator<Bills> it = bills.iterator(); it.hasNext();) {
+        for (Iterator<Bills> it = billsList.iterator(); it.hasNext();) {
             Bills itg = (Bills) it.next();
             if (itg == (Bills) adapterView.getItemAtPosition(position)) {
                 BillsDAO billsDAO = new BillsDAO(this);
@@ -90,5 +92,9 @@ public class ListarCuentas extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+        return false;
+    }
 }
