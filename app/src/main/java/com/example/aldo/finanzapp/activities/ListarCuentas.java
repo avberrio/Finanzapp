@@ -1,11 +1,14 @@
 package com.example.aldo.finanzapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.example.aldo.finanzapp.Models.Bills;
@@ -41,6 +44,15 @@ public class ListarCuentas extends AppCompatActivity {
         listView.setAdapter(newAdapter);
         newAdapter.notifyDataSetChanged();
 
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab2);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ListarCuentas.this, AddExpenseActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
