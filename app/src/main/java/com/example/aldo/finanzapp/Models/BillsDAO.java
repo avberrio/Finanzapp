@@ -9,6 +9,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.aldo.finanzapp.models.DBHelper;
+
 import java.util.ArrayList;
 
 /**

@@ -1,14 +1,20 @@
 package com.example.aldo.finanzapp.activities;
 
+
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.aldo.finanzapp.Fragments.DatePickerFragment;
 import com.example.aldo.finanzapp.R;
 import com.example.aldo.finanzapp.models.Bills;
 import com.example.aldo.finanzapp.models.BillsDAO;
@@ -62,7 +68,8 @@ public class AddExpenseActivity extends AppCompatActivity {
             else{
                 billsDAO = new BillsDAO(this);
                 billsDAO.open();
-                Bills bills = new Bills(title,amount,"01/01/2017",description);
+                Button finishDateButton = (Button) findViewById(R.id.button_calendar2);
+                Bills bills = new Bills(title,amount, finishDateButton.getText().toString(), description);
                 billsDAO.createBill(bills);
                 Intent intent = new Intent(AddExpenseActivity.this,ListarCuentas.class);
                 startActivity(intent);
@@ -75,7 +82,12 @@ public class AddExpenseActivity extends AppCompatActivity {
 
 
     // TODO : create fragment to display a calendarView
-    public boolean chooseDate(View view){
-        return true;
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+
+
+        //calendarButton.setText(DialogFragment.);
     }
 }

@@ -2,6 +2,7 @@ package com.example.aldo.finanzapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -36,6 +37,7 @@ public class ListarCuentas extends AppCompatActivity implements AdapterView.OnIt
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
         billsDAO = new BillsDAO(this);
         billsDAO.open();
         billsList = billsDAO.getAllTasks();
@@ -46,6 +48,15 @@ public class ListarCuentas extends AppCompatActivity implements AdapterView.OnIt
         listView.setOnItemClickListener(this);
         newAdapter.notifyDataSetChanged();
 
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab2);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ListarCuentas.this, AddExpenseActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -76,8 +87,8 @@ public class ListarCuentas extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         for (Iterator<Bills> it = billsList.iterator(); it.hasNext();) {
-            Bills itg = (Bills) it.next();
-            if (itg == (Bills) adapterView.getItemAtPosition(position)) {
+            Bills itg = it.next();
+            if (itg == adapterView.getItemAtPosition(position)) {
                 BillsDAO billsDAO = new BillsDAO(this);
 
                 Intent intent = new Intent(ListarCuentas.this, EditExpenseActivity.class);
