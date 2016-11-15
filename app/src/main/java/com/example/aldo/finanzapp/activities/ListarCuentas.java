@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,6 +47,7 @@ public class ListarCuentas extends AppCompatActivity implements AdapterView.OnIt
         listView = (ListView) findViewById(R.id.myListView);
         listView.setAdapter(newAdapter);
         listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
         newAdapter.notifyDataSetChanged();
 
 
@@ -89,7 +91,6 @@ public class ListarCuentas extends AppCompatActivity implements AdapterView.OnIt
         for (Iterator<Bills> it = billsList.iterator(); it.hasNext();) {
             Bills itg = it.next();
             if (itg == adapterView.getItemAtPosition(position)) {
-                BillsDAO billsDAO = new BillsDAO(this);
 
                 Intent intent = new Intent(ListarCuentas.this, EditExpenseActivity.class);
                 // Send expense data values to EditExpenseActivity
@@ -105,8 +106,18 @@ public class ListarCuentas extends AppCompatActivity implements AdapterView.OnIt
     }
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+        for (Iterator<Bills> it = billsList.iterator(); it.hasNext();){
+            Bills itg = (Bills) it.next();
+            if (itg == (Bills) adapterView.getItemAtPosition(position)){
+                billsDAO.deleteBill(itg);
+                billsList = billsDAO.getAllTasks();
+                newAdapter = new MyClassAdapter(this, billsList);
+                listView.setAdapter(newAdapter);
+                newAdapter.notifyDataSetChanged();
+                return true;
+            }
+        }
         return false;
     }
 }

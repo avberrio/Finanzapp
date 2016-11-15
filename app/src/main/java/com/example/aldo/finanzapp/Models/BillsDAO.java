@@ -67,6 +67,7 @@ public class BillsDAO {
 
 
     public void updateBill (Bills bill, String oldTitle, String oldAmount, String oldDate) {
+        this.open();
         ContentValues values = new ContentValues();
         values.put(BILLS_NAME, bill.getBillName());
         values.put(AMOUNT, bill.getAmount());
@@ -79,10 +80,11 @@ public class BillsDAO {
 
     }
 
-
-    public void deleteTask (Bills bills){
-        String[] selectionArgs = { bills.getBillName()};
-        this.mDb.delete(BILL_TABLE_NAME, BILLS_NAME + " = ?",selectionArgs);
+    public void deleteBill (Bills bills){
+        this.open();
+        String id = getBillId(bills.getBillName(),bills.getAmount(),bills.getFinishDate());
+        String[] selectionArgs = { String.valueOf(id)};
+        this.mDb.delete(BILL_TABLE_NAME, KEY + " = ?",selectionArgs);
     }
 
     public ArrayList<Bills> getAllTasks(){
