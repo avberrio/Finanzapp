@@ -58,6 +58,8 @@ public class AddExpenseActivity extends AppCompatActivity {
             String amount = editAmount.getText().toString();
             EditText editDescription = (EditText) findViewById(R.id.input_text_description);
             String description = editDescription.getText().toString();
+            Button buttonDate = (Button) findViewById(R.id.button_calendar2);
+            String date = buttonDate.getText().toString();
 
             // If the title is empty
             if (title.equals("")){
@@ -65,11 +67,21 @@ public class AddExpenseActivity extends AppCompatActivity {
                 Toast toast = Toast.makeText(this, " entrar un titulo ", duration);
                 toast.show();
             }
+            else if (date.equals("Fecha")){
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(this, " entrar una fecha ", duration);
+                toast.show();
+            }
+            else if (amount.equals("")){
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(this, " entrar un monto ", duration);
+                toast.show();
+            }
             else{
                 billsDAO = new BillsDAO(this);
                 billsDAO.open();
-                Button finishDateButton = (Button) findViewById(R.id.button_calendar2);
-                Bills bills = new Bills(title,amount, finishDateButton.getText().toString(), description);
+                Bills bills = new Bills(title,amount, date, description);
+
                 billsDAO.createBill(bills);
                 Intent intent = new Intent(AddExpenseActivity.this,ListarCuentas.class);
                 startActivity(intent);
@@ -80,14 +92,8 @@ public class AddExpenseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    // TODO : create fragment to display a calendarView
-
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
-
-
-        //calendarButton.setText(DialogFragment.);
     }
 }

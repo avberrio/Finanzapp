@@ -8,6 +8,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.aldo.finanzapp.models.DBHelper;
 
@@ -65,15 +66,16 @@ public class BillsDAO {
     }
 
 
-    public void updateTask (Bills bill, String oldTitle) {
-               ContentValues values = new ContentValues();
+    public void updateBill (Bills bill, String oldTitle, String oldAmount, String oldDate) {
+        ContentValues values = new ContentValues();
         values.put(BILLS_NAME, bill.getBillName());
         values.put(AMOUNT, bill.getAmount());
         values.put(FINISH_DATE,bill.getFinishDate());
         values.put(DESCRIPTION,bill.getDescription());
-        String[] whereArgs = new String[] {String.valueOf(oldTitle)};
+        String id = getBillId(oldTitle,oldAmount,oldDate);
+        String[] whereArgs = new String[] {String.valueOf(id)};
 
-        mDb.update(BILL_TABLE_NAME, values, BILLS_NAME + "=?", whereArgs);
+        mDb.update(BILL_TABLE_NAME, values, KEY + "=?", whereArgs);
 
     }
 
@@ -96,6 +98,18 @@ public class BillsDAO {
         }
         cursor.close();
         return bills_array;
+    }
+
+    public String getBillId (String title, String amount, String date ){
+        String id;
+        String queryGetId = "SELECT " + KEY + " FROM " + BILL_TABLE_NAME + " WHERE " +
+                BILLS_NAME + " = '" + title + "' AND " + FINISH_DATE + " = '" + date + "' AND " +
+                AMOUNT + " = '" + amount + "';";
+        this.open();
+        Cursor cursor = mDb.rawQuery(queryGetId,null);
+        cursor.moveToFirst();
+        id = cursor.getString(0);
+        return id;
     }
 
 }

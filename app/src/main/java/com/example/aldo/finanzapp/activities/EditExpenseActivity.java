@@ -2,14 +2,18 @@ package com.example.aldo.finanzapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.aldo.finanzapp.Fragments.DatePickerFragment;
 import com.example.aldo.finanzapp.R;
 import com.example.aldo.finanzapp.models.Bills;
 import com.example.aldo.finanzapp.models.BillsDAO;
@@ -44,6 +48,9 @@ public class EditExpenseActivity extends AppCompatActivity {
         editAmount.setText(data.getString("ExpenseAmount"));
         EditText editDescription = (EditText) findViewById(R.id.input_text_description);
         editDescription.setText(data.getString("ExpenseDescription"));
+        Button buttonDate = (Button) findViewById(R.id.button_calendar2);
+        buttonDate.setText(data.getString("ExpenseFinishDate"));
+
 
     }
 
@@ -67,6 +74,8 @@ public class EditExpenseActivity extends AppCompatActivity {
             String amount = editAmount.getText().toString();
             EditText editDescription = (EditText) findViewById(R.id.input_text_description);
             String description = editDescription.getText().toString();
+            Button buttonDate = (Button) findViewById(R.id.button_calendar2);
+            String date = buttonDate.getText().toString();
 
             // If the title is empty
             if (title.equals("")){
@@ -74,18 +83,33 @@ public class EditExpenseActivity extends AppCompatActivity {
                 Toast toast = Toast.makeText(this, " entrar un titulo ", duration);
                 toast.show();
             }
+            else if (date.equals("Fecha")){
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(this, " entrar una fecha ", duration);
+                toast.show();
+            }
+            else if (amount.equals("")){
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(this, " entrar un monto ", duration);
+                toast.show();
+            }
             else{
                 billsDAO = new BillsDAO(this);
                 billsDAO.open();
-                Bills bills = new Bills(title,amount,"01/01/2017",description);
-                billsDAO.createBill(bills);
+                Bills bill = new Bills(title,amount, date, description);
+                billsDAO.updateBill(bill,data.getString("ExpenseTitle"),data.getString("ExpenseAmount"),
+                        data.getString("ExpenseFinishDate"));
                 Intent intent = new Intent(EditExpenseActivity.this,ListarCuentas.class);
                 startActivity(intent);
             }
-
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 }
 
