@@ -34,6 +34,7 @@ public class EditExpenseActivity extends AppCompatActivity {
     private Bundle data;
     private Uri selectedImage;
     private String imgDecodableString;
+    private int hasImage = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class EditExpenseActivity extends AppCompatActivity {
         buttonDate.setText(data.getString("ExpenseFinishDate"));
 
         if (data.getString("ExpenseImage").length() > 1 ){
+            hasImage = 1;
             selectedImage = Uri.parse(data.getString("ExpenseImage"));
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
             // Get the cursor
@@ -120,7 +122,7 @@ public class EditExpenseActivity extends AppCompatActivity {
                 billsDAO = new BillsDAO(this);
                 billsDAO.open();
                 Bills bill;
-                if (selectedImage == null){
+                if (hasImage == 0){
                     bill = new Bills(title,amount, date, description,"");
                 }
                 else {
@@ -158,6 +160,7 @@ public class EditExpenseActivity extends AppCompatActivity {
                 // Get the Image from data
 
                 selectedImage = data.getData();
+                hasImage = 1;
                 String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
                 // Get the cursor
@@ -182,6 +185,10 @@ public class EditExpenseActivity extends AppCompatActivity {
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
                     .show();
         }
+    }
+
+    public void showImage(View v){
+
     }
 }
 
