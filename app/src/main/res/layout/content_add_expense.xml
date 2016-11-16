@@ -46,7 +46,59 @@
         android:id="@+id/input_text_description"
         android:hint="Descripcion"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Importar factura"
+        android:textSize="18sp"
+        android:paddingTop="12dp"
+        android:textColor="@color/colorGreenPrimary"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="8dp">
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="31dp"
+            android:background="@drawable/ic_crop_original_24dp"
+            android:onClick="loadImageGallery"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Importar desde galeria"
+            android:paddingLeft="10sp"
+            android:textSize="16sp"
+            android:textIsSelectable="true"
+            android:onClick="loadImageGallery"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="8dp">
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="31dp"
+            android:background="@drawable/ic_picture_as_pdf_24px"
+            android:onClick="loadImageGallery"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Importar un pdf"
+            android:paddingLeft="10sp"
+            android:textSize="16sp"
+            android:textIsSelectable="true"
+            android:onClick="loadPdf"/>
+    </LinearLayout>
 
+    <ImageView
+        android:id="@+id/imgFactureView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showImage"/>
 
 </LinearLayout>
