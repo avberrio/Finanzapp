@@ -1,7 +1,11 @@
 package com.example.aldo.finanzapp.activities;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,10 +28,12 @@ import com.example.aldo.finanzapp.models.BillsDAO;
  */
 
 public class EditExpenseActivity extends AppCompatActivity {
-
+    private static final int RESULT_LOAD_IMG = 1;
     private BillsDAO billsDAO;
     private Bills bills;
     private Bundle data;
+    private Uri selectedImage;
+    private String imgDecodableString;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +58,23 @@ public class EditExpenseActivity extends AppCompatActivity {
         Button buttonDate = (Button) findViewById(R.id.button_calendar2);
         buttonDate.setText(data.getString("ExpenseFinishDate"));
 
+        if (data.getString("ExpenseImage").length() > 1 ){
+            selectedImage = Uri.parse(data.getString("ExpenseImage"));
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            // Get the cursor
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            // Move to first row
+            cursor.moveToFirst();
 
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            imgDecodableString = cursor.getString(columnIndex);
+            cursor.close();
+            ImageView imgView = (ImageView) findViewById(R.id.imgFactureView);
+            // Set the Image in ImageView after decoding the String
+            imgView.setImageBitmap(BitmapFactory
+                    .decodeFile(imgDecodableString));
+        }
     }
 
     public boolean onCreateOptionsMenu (Menu menu){
@@ -96,7 +119,13 @@ public class EditExpenseActivity extends AppCompatActivity {
             else{
                 billsDAO = new BillsDAO(this);
                 billsDAO.open();
-                Bills bill = new Bills(title,amount, date, description);
+                Bills bill;
+                if (selectedImage == null){
+                    bill = new Bills(title,amount, date, description,"");
+                }
+                else {
+                    bill = new Bills(title, amount, date, description, selectedImage.toString());
+                }
                 billsDAO.updateBill(bill,data.getString("ExpenseTitle"),data.getString("ExpenseAmount"),
                         data.getString("ExpenseFinishDate"));
                 Intent intent = new Intent(EditExpenseActivity.this,ListarCuentas.class);
@@ -110,6 +139,49 @@ public class EditExpenseActivity extends AppCompatActivity {
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void loadImageGallery(View v){
+        //create intent to open image application
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent,RESULT_LOAD_IMG);
+    }
+
+    @Override
+    // Display the image picked
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            // When an Image is picked
+            if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
+                    && null != data) {
+                // Get the Image from data
+
+                selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                imgDecodableString = cursor.getString(columnIndex);
+                cursor.close();
+                ImageView imgView = (ImageView) findViewById(R.id.imgFactureView);
+                // Set the Image in ImageView after decoding the String
+                imgView.setImageBitmap(BitmapFactory
+                        .decodeFile(imgDecodableString));
+
+            } else {
+                Toast.makeText(this, "You haven't picked Image",
+                        Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 }
 

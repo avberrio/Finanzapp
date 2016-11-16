@@ -25,16 +25,17 @@ public class BillsDAO {
     public static final String AMOUNT = "amount";
     public static final String FINISH_DATE = "finishDate";
     public static final String DESCRIPTION = "description";
+    public static final String URI = "uri";
     public static final String UPDATE_STATUS = "updateStatus";
 
 
     public static final String BILL_TABLE_CREATE = "CREATE TABLE " + BILL_TABLE_NAME + "(" + KEY +
             " INTEGER PRIMARY KEY AUTOINCREMENT, " + BILLS_NAME + " TEXT, " + AMOUNT + " INTEGER, " +
-            FINISH_DATE + " TEXT, " + DESCRIPTION + " TEXT);";
+            FINISH_DATE + " TEXT, " + DESCRIPTION + " TEXT, " + URI + " TEXT);";
 
     public static final String BILL_TABLE_DROP = "DROP TABLE IF EXISTS " + BILL_TABLE_NAME + ";";
 
-    private String[] allColumns = {KEY, BILLS_NAME, AMOUNT, FINISH_DATE, DESCRIPTION};
+    private String[] allColumns = {KEY, BILLS_NAME, AMOUNT, FINISH_DATE, DESCRIPTION, URI};
 
     protected DBHelper dBHelper = null;
     protected SQLiteDatabase mDb = null;
@@ -61,6 +62,7 @@ public class BillsDAO {
         values.put(AMOUNT, bill.getAmount());
         values.put(FINISH_DATE, bill.getFinishDate());
         values.put(DESCRIPTION, bill.getDescription());
+        values.put(URI,bill.getSelectedImage());
         long insertId = mDb.insert(BILL_TABLE_NAME, null, values);
         bill.setId(insertId);
     }
@@ -73,6 +75,7 @@ public class BillsDAO {
         values.put(AMOUNT, bill.getAmount());
         values.put(FINISH_DATE,bill.getFinishDate());
         values.put(DESCRIPTION,bill.getDescription());
+        values.put(URI,bill.getSelectedImage());
         String id = getBillId(oldTitle,oldAmount,oldDate);
         String[] whereArgs = new String[] {String.valueOf(id)};
 
@@ -93,7 +96,7 @@ public class BillsDAO {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Bills bill = new Bills(cursor.getString(1), cursor.getString(2),
-                    cursor.getString(3), cursor.getString(4));
+                    cursor.getString(3), cursor.getString(4), cursor.getString(5));
             bill.setId(cursor.getInt(0));
             bills_array.add(bill);
             cursor.moveToNext();

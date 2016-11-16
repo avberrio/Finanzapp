@@ -99,6 +99,7 @@ public class ListarCuentas extends AppCompatActivity implements AdapterView.OnIt
                 intent.putExtra("ExpenseAmount", itg.getAmount());
                 intent.putExtra("ExpenseDescription", itg.getDescription());
                 intent.putExtra("ExpenseFinishDate", itg.getFinishDate());
+                intent.putExtra("ExpenseImage", itg.getSelectedImage());
 
                 startActivity(intent);
             }

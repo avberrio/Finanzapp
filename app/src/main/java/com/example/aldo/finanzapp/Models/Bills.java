@@ -1,5 +1,7 @@
 package com.example.aldo.finanzapp.models;
 
+import android.net.Uri;
+
 /**
  * Created by aldo on 13-11-16.
  */
@@ -12,12 +14,14 @@ public class Bills {
     private String finishDate;
     private String description;
     private String updateStatus;
+    private String selectedImage;
 
-    public Bills (String billName, String value, String finishDate, String description){
+    public Bills (String billName, String value, String finishDate, String description, String selectedImage){
         this.billName = billName;
         this.amount = value;
         this.finishDate = finishDate;
         this.description = description;
+        this.selectedImage = selectedImage;
 
     }
 
@@ -63,12 +67,11 @@ public class Bills {
         this.description = description;
     }
 
-
-
-
-
     public String getUpdateStatus() { return updateStatus; }
     public void setUpdateStatus(String updateStatus) {this.updateStatus = updateStatus; }
+
+    public void setSelectedImage(String selectedImage) {this.selectedImage = selectedImage;}
+    public String getSelectedImage() {return selectedImage;}
 
 
     public String toString(){

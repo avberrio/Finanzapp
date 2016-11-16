@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +34,8 @@ public class AddExpenseActivity extends AppCompatActivity {
 
     private BillsDAO billsDAO;
     private String imgDecodableString;
+    private Uri selectedImage;
+    private int hasImage = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -87,8 +90,13 @@ public class AddExpenseActivity extends AppCompatActivity {
             else{
                 billsDAO = new BillsDAO(this);
                 billsDAO.open();
-                Bills bills = new Bills(title,amount, date, description);
-
+                Bills bills;
+                if (hasImage == 0){
+                    bills = new Bills(title,amount, date, description,"");
+                }
+                else {
+                    bills = new Bills(title, amount, date, description, selectedImage.toString());
+                }
                 billsDAO.createBill(bills);
                 Intent intent = new Intent(AddExpenseActivity.this,ListarCuentas.class);
                 startActivity(intent);
@@ -121,7 +129,8 @@ public class AddExpenseActivity extends AppCompatActivity {
                     && null != data) {
                 // Get the Image from data
 
-                Uri selectedImage = data.getData();
+                selectedImage = data.getData();
+                hasImage = 1;
                 String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
                 // Get the cursor
