@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.example.aldo.finanzapp.Fragments.GraphFragment;
 import com.example.aldo.finanzapp.R;
+import com.idescout.sql.SqlScoutServer;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -28,6 +29,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //To debug db
+        SqlScoutServer.create(this, getPackageName());
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

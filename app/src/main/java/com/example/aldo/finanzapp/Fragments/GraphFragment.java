@@ -9,19 +9,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.aldo.finanzapp.R;
+import com.example.aldo.finanzapp.models.Bills;
+import com.example.aldo.finanzapp.models.BillsDAO;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 
 /**
  * Created by Mathieu on 19/11/2016.
  */
 
 public class GraphFragment extends Fragment {
+
+    private BillsDAO billsDAO;
+    private ArrayList<Bills> billsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,8 +49,16 @@ public class GraphFragment extends Fragment {
         calendar.add(Calendar.DATE, 1);
         Date d3 = calendar.getTime();
         Log.d("Date", "d1 = " +d1+ " d2 = "+d2+" d3 = "+d3);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+        billsDAO = new BillsDAO(getActivity());
+        Log.d("Date", billsDAO.getDate());
+        billsList  = billsDAO.getAllBills(billsDAO.getDate());
 
+        for (Iterator<Bills> it = billsList.iterator(); it.hasNext();){
+            Bills itg = it.next();
+            Log.d("expense ", itg.getBillName());
+        }
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
                 new DataPoint(d1, 200),
                 new DataPoint(d2, 400),
                 new DataPoint(d3, 1000),
@@ -69,6 +84,5 @@ public class GraphFragment extends Fragment {
         // is not nessecary
         graph.getGridLabelRenderer().setHumanRounding(false);
     }
-
 
 }

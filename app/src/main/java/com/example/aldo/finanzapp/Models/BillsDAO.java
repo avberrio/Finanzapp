@@ -13,6 +13,7 @@ import android.util.Log;
 import com.example.aldo.finanzapp.models.DBHelper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Mathieu on 30/08/2016.
@@ -31,7 +32,7 @@ public class BillsDAO {
 
     public static final String BILL_TABLE_CREATE = "CREATE TABLE " + BILL_TABLE_NAME + "(" + KEY +
             " INTEGER PRIMARY KEY AUTOINCREMENT, " + BILLS_NAME + " TEXT, " + AMOUNT + " INTEGER, " +
-            FINISH_DATE + " TEXT, " + DESCRIPTION + " TEXT, " + URI + " TEXT);";
+            FINISH_DATE + " DATE, " + DESCRIPTION + " TEXT, " + URI + " TEXT);";
 
     public static final String BILL_TABLE_DROP = "DROP TABLE IF EXISTS " + BILL_TABLE_NAME + ";";
 
@@ -90,11 +91,30 @@ public class BillsDAO {
         this.mDb.delete(BILL_TABLE_NAME, KEY + " = ?",selectionArgs);
     }
 
-    public ArrayList<Bills> getAllTasks(){
+    public ArrayList<Bills> getAllBills(){
         ArrayList<Bills> bills_array = new ArrayList<Bills>();
         Cursor cursor = mDb.query(BILL_TABLE_NAME,allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
+            Bills bill = new Bills(cursor.getString(1), cursor.getString(2),
+                    cursor.getString(3), cursor.getString(4), cursor.getString(5));
+            bill.setId(cursor.getInt(0));
+            bills_array.add(bill);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return bills_array;
+    }
+
+    public ArrayList<Bills> getAllBills(String date){
+        ArrayList<Bills> bills_array = new ArrayList<Bills>();
+        String queryGetBillsByDate = "SELECT * FROM " + BILL_TABLE_NAME + " WHERE " + FINISH_DATE + " <= DATE_ADD('"
+        + date + "',INTERVAL 15 DAY);";
+        this.open();
+        Cursor cursor = mDb.rawQuery(queryGetBillsByDate,null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Log.d("Bills"," finish date = " + cursor.getString(3));
             Bills bill = new Bills(cursor.getString(1), cursor.getString(2),
                     cursor.getString(3), cursor.getString(4), cursor.getString(5));
             bill.setId(cursor.getInt(0));
@@ -115,6 +135,15 @@ public class BillsDAO {
         cursor.moveToFirst();
         id = cursor.getString(0);
         return id;
+    }
+
+    public String getDate(){
+        Calendar calendar = Calendar.getInstance();
+        String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+        String month = String.valueOf(calendar.get(Calendar.MONTH)+1);
+        String year  = String.valueOf(calendar.get(Calendar.YEAR));
+        String date  = day + "/" + month + "/" + year;
+        return date;
     }
 
 }

@@ -41,7 +41,7 @@ public class ListarCuentas extends AppCompatActivity implements AdapterView.OnIt
 
         billsDAO = new BillsDAO(this);
         billsDAO.open();
-        billsList = billsDAO.getAllTasks();
+        billsList = billsDAO.getAllBills();
 
         newAdapter = new MyClassAdapter(this, billsList);
         listView = (ListView) findViewById(R.id.myListView);
@@ -112,7 +112,7 @@ public class ListarCuentas extends AppCompatActivity implements AdapterView.OnIt
             Bills itg = (Bills) it.next();
             if (itg == (Bills) adapterView.getItemAtPosition(position)){
                 billsDAO.deleteBill(itg);
-                billsList = billsDAO.getAllTasks();
+                billsList = billsDAO.getAllBills();
                 newAdapter = new MyClassAdapter(this, billsList);
                 listView.setAdapter(newAdapter);
                 newAdapter.notifyDataSetChanged();
