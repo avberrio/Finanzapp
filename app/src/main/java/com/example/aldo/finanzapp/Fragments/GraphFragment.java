@@ -16,9 +16,12 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -41,6 +44,8 @@ public class GraphFragment extends Fragment {
 
 
     public void initGraph(GraphView graph){
+        int amount;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MMM-dd");
         // generate Dates
         Calendar calendar = Calendar.getInstance();
         Date d1 = calendar.getTime();
@@ -52,9 +57,27 @@ public class GraphFragment extends Fragment {
         billsDAO = new BillsDAO(getActivity());
         String period = "15";
         billsList = billsDAO.getBills(period);
+
+        HashMap<Date,Integer> points = new HashMap<Date,Integer>();
         for (Iterator<Bills> it = billsList.iterator(); it.hasNext();){
             Bills itg = it.next();
-            Log.d("expense ", itg.getBillName());
+            Date key  = null;
+            try {
+                Log.d("date ", itg.getFinishDate());
+                key = formatter.parse(itg.getFinishDate());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (points.containsKey(key)){
+                amount = points.get(key) + Integer.parseInt(itg.getAmount());
+                points.put(key,amount);
+                Log.d("cle existe ","cle : " +key + " amount " + amount);
+            }
+            else{
+                amount = Integer.parseInt(itg.getAmount());
+                points.put(key, amount);
+                Log.d("cle existe pas ","cle : " +key + " amount " + amount);
+            }
         }
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
