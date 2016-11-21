@@ -50,9 +50,8 @@ public class GraphFragment extends Fragment {
         Date d3 = calendar.getTime();
         Log.d("Date", "d1 = " +d1+ " d2 = "+d2+" d3 = "+d3);
         billsDAO = new BillsDAO(getActivity());
-        Log.d("Date", billsDAO.getDate());
-        billsList  = billsDAO.getAllBills(billsDAO.getDate());
-
+        String period = "15";
+        billsList = billsDAO.getBills(period);
         for (Iterator<Bills> it = billsList.iterator(); it.hasNext();){
             Bills itg = it.next();
             Log.d("expense ", itg.getBillName());

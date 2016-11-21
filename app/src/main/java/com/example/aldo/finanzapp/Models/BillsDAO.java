@@ -106,10 +106,16 @@ public class BillsDAO {
         return bills_array;
     }
 
-    public ArrayList<Bills> getAllBills(String date){
+    /**
+     * @param period number of days of the period to pick the expenses
+     * @return List with the expenses
+     */
+    public ArrayList<Bills> getBills(String period){
         ArrayList<Bills> bills_array = new ArrayList<Bills>();
-        String queryGetBillsByDate = "SELECT * FROM " + BILL_TABLE_NAME + " WHERE " + FINISH_DATE + " <= DATE_ADD('"
-        + date + "',INTERVAL 15 DAY);";
+        /*String queryGetBillsByDate = "SELECT * FROM " + BILL_TABLE_NAME + " WHERE " + FINISH_DATE + " <= DATE_ADD('"
+        + date + "',INTERVAL 15 DAY);";*/
+        String queryGetBillsByDate = "SELECT * FROM " + BILL_TABLE_NAME + " WHERE " + FINISH_DATE +
+                " <= date('now','+" + period + " days');";
         this.open();
         Cursor cursor = mDb.rawQuery(queryGetBillsByDate,null);
         cursor.moveToFirst();
@@ -137,12 +143,21 @@ public class BillsDAO {
         return id;
     }
 
+    /* not usefull
     public String getDate(){
         Calendar calendar = Calendar.getInstance();
         String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
         String month = String.valueOf(calendar.get(Calendar.MONTH)+1);
         String year  = String.valueOf(calendar.get(Calendar.YEAR));
-        String date  = day + "/" + month + "/" + year;
+        String date  = year + "-" + month + "-" + day;
+        return date;
+    }*/
+
+    public String changeDateFormat(String date){
+        String day = date.substring(0,2);
+        String month = date.substring(3,5);
+        String year  = date.substring(6,10);
+        date = year + "-" + month + "-" + day;
         return date;
     }
 

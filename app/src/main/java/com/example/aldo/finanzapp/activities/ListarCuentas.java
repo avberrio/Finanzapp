@@ -69,7 +69,8 @@ public class ListarCuentas extends AppCompatActivity implements AdapterView.OnIt
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
             case android.R.id.home:
-                onBackPressed();
+                Intent intent = new Intent(ListarCuentas.this, MainActivity.class);
+                startActivity(intent);
                 return true;
 
             default:
