@@ -122,6 +122,8 @@ public class EditExpenseActivity extends AppCompatActivity {
                 billsDAO = new BillsDAO(this);
                 billsDAO.open();
                 Bills bill;
+                date = billsDAO.changeDateFormat(date);
+
                 if (hasImage == 0){
                     bill = new Bills(title,amount, date, description,"");
                 }

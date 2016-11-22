@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.logging.Handler;
+import java.util.Random;
 
 /**
  * Created by Mathieu on 19/11/2016.
@@ -38,7 +39,8 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
     private BillsDAO billsDAO;
     private ArrayList<Bills> billsList;
     private GraphView graphView;
-    String period = "15";
+    private  static String period = "15";
+    private BarGraphSeries<DataPoint> series;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,13 +52,10 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         button15j.setOnClickListener(this);
         button30j.setOnClickListener(this);
         billsDAO = new BillsDAO(getActivity());
-
-        Log.d("ON CREATE ", " init avec " + period);
         initGraph(graphView,period);
 
         return view;
     }
-
 
     public void initGraph(GraphView graph, String period){
         int amount;
@@ -73,7 +72,6 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         for (Iterator<Bills> it = billsList.iterator(); it.hasNext();){
             Bills itg = it.next();
             Date key  = null;
-            //String key = itg.getFinishDate();
             try {
                 key = formatter.parse(itg.getFinishDate());
             } catch (ParseException e) {
@@ -96,7 +94,8 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
             dataPoints[i] = new DataPoint(key,points.get(key));
             i++;
         }
-        BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(dataPoints);
+
+        series = new BarGraphSeries<DataPoint>(dataPoints);
 
         series.setSpacing(20);
         series.setAnimated(true);
@@ -110,7 +109,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
 
         // set date label formatter
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(graph.getContext()));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(4);
+        graph.getGridLabelRenderer().setNumHorizontalLabels(3);
 
         // set manual x and y bounds to have nice steps
         graph.getViewport().setMinX(dateNow.getTime());
@@ -129,7 +128,6 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()){
             case R.id.button_15j :
                 graphView.removeAllSeries();
-                graphView.onDataChanged(true,true);
                 period = "15";
                 initGraph(graphView, "15");
                 Log.d("button ", " 15j");
@@ -143,4 +141,11 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        graphView.removeAllSeries();
+    }
+
 }

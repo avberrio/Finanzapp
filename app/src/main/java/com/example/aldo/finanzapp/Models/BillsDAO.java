@@ -112,15 +112,13 @@ public class BillsDAO {
      */
     public ArrayList<Bills> getBills(String period){
         ArrayList<Bills> bills_array = new ArrayList<Bills>();
-        /*String queryGetBillsByDate = "SELECT * FROM " + BILL_TABLE_NAME + " WHERE " + FINISH_DATE + " <= DATE_ADD('"
-        + date + "',INTERVAL 15 DAY);";*/
         String queryGetBillsByDate = "SELECT * FROM " + BILL_TABLE_NAME + " WHERE " + FINISH_DATE +
                 " <= date('now','+" + period + " days');";
         this.open();
         Cursor cursor = mDb.rawQuery(queryGetBillsByDate,null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Log.d("Bills"," finish date = " + cursor.getString(3));
+            //Log.d("Bills"," finish date = " + cursor.getString(3));
             Bills bill = new Bills(cursor.getString(1), cursor.getString(2),
                     cursor.getString(3), cursor.getString(4), cursor.getString(5));
             bill.setId(cursor.getInt(0));
@@ -158,6 +156,7 @@ public class BillsDAO {
         String month = date.substring(3,5);
         String year  = date.substring(6,10);
         date = year + "-" + month + "-" + day;
+        Log.d("date ",date);
         return date;
     }
 
