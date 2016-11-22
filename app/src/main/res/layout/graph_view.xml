@@ -1,8 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.jjoe64.graphview.GraphView
-
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
     android:layout_width="wrap_content"
-    android:layout_height="200dip"
-    android:id="@+id/graph"
-    android:layout_marginTop="106dp"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/graph_layout"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <com.jjoe64.graphview.GraphView
+
+        android:layout_width="wrap_content"
+        android:layout_height="200dip"
+        android:id="@+id/graph"
+        android:layout_marginTop="75dp"
+        xmlns:android="http://schemas.android.com/apk/res/android" />
+
+    <Button
+        android:id="@+id/button_30j"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30j"
+        android:layout_below="@+id/graph"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="13dp" />
+
+    <Button
+        android:id="@+id/button_15j"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15j"
+        android:layout_marginRight="38dp"
+        android:layout_alignBaseline="@+id/button_30j"
+        android:layout_alignBottom="@+id/button_30j"
+        android:layout_toLeftOf="@+id/button_30j" />
+
+</RelativeLayout>
+

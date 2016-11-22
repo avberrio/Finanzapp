@@ -1,18 +1,22 @@
 package com.example.aldo.finanzapp.Fragments;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.aldo.finanzapp.R;
 import com.example.aldo.finanzapp.models.Bills;
 import com.example.aldo.finanzapp.models.BillsDAO;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -23,47 +27,54 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.logging.Handler;
 
 /**
  * Created by Mathieu on 19/11/2016.
  */
 
-public class GraphFragment extends Fragment {
+public class GraphFragment extends Fragment implements View.OnClickListener {
 
     private BillsDAO billsDAO;
     private ArrayList<Bills> billsList;
+    private GraphView graphView;
+    String period = "15";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.graph_view, container, false);
-        GraphView graphView = (GraphView) view.findViewById(R.id.graph);
-        initGraph(graphView);
+        graphView = (GraphView) view.findViewById(R.id.graph);
+        Button button15j = (Button) view.findViewById(R.id.button_15j);
+        Button button30j = (Button) view.findViewById(R.id.button_30j);
+        button15j.setOnClickListener(this);
+        button30j.setOnClickListener(this);
+        billsDAO = new BillsDAO(getActivity());
+
+        Log.d("ON CREATE ", " init avec " + period);
+        initGraph(graphView,period);
+
         return view;
     }
 
 
-    public void initGraph(GraphView graph){
+    public void initGraph(GraphView graph, String period){
         int amount;
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MMM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         // generate Dates
         Calendar calendar = Calendar.getInstance();
-        Date d1 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d2 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d3 = calendar.getTime();
-        Log.d("Date", "d1 = " +d1+ " d2 = "+d2+" d3 = "+d3);
-        billsDAO = new BillsDAO(getActivity());
-        String period = "15";
+        Date dateNow = calendar.getTime();
+        calendar.add(Calendar.DATE, Integer.valueOf(period));
+        Date dateEndOfPeriod = calendar.getTime();
+
         billsList = billsDAO.getBills(period);
 
-        HashMap<Date,Integer> points = new HashMap<Date,Integer>();
+        HashMap<Date,Integer> points = new HashMap<Date, Integer>();
         for (Iterator<Bills> it = billsList.iterator(); it.hasNext();){
             Bills itg = it.next();
             Date key  = null;
+            //String key = itg.getFinishDate();
             try {
-                Log.d("date ", itg.getFinishDate());
                 key = formatter.parse(itg.getFinishDate());
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -71,23 +82,29 @@ public class GraphFragment extends Fragment {
             if (points.containsKey(key)){
                 amount = points.get(key) + Integer.parseInt(itg.getAmount());
                 points.put(key,amount);
-                Log.d("cle existe ","cle : " +key + " amount " + amount);
             }
             else{
                 amount = Integer.parseInt(itg.getAmount());
                 points.put(key, amount);
-                Log.d("cle existe pas ","cle : " +key + " amount " + amount);
             }
         }
 
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(d1, 200),
-                new DataPoint(d2, 400),
-                new DataPoint(d3, 1000),
-        });
-        series.setDrawBackground(true);
+        DataPoint[] dataPoints = new DataPoint[points.size()];
+        int i = 0;
+        for (Iterator<Date> it = points.keySet().iterator(); it.hasNext();){
+            Date key = it.next();
+            dataPoints[i] = new DataPoint(key,points.get(key));
+            i++;
+        }
+        BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(dataPoints);
+
+        series.setSpacing(20);
         series.setAnimated(true);
-        series.setDrawDataPoints(true);
+        series.setColor(Color.rgb(8,174,158));
+
+        // draw values on top
+        series.setDrawValuesOnTop(true);
+        series.setValuesOnTopColor(Color.BLACK);
 
         graph.addSeries(series);
 
@@ -96,8 +113,8 @@ public class GraphFragment extends Fragment {
         graph.getGridLabelRenderer().setNumHorizontalLabels(4);
 
         // set manual x and y bounds to have nice steps
-        graph.getViewport().setMinX(d1.getTime());
-        graph.getViewport().setMaxX(d3.getTime());
+        graph.getViewport().setMinX(dateNow.getTime());
+        graph.getViewport().setMaxX(dateEndOfPeriod.getTime());
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinY(0);
         graph.getViewport().setYAxisBoundsManual(true);
@@ -107,4 +124,23 @@ public class GraphFragment extends Fragment {
         graph.getGridLabelRenderer().setHumanRounding(false);
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.button_15j :
+                graphView.removeAllSeries();
+                graphView.onDataChanged(true,true);
+                period = "15";
+                initGraph(graphView, "15");
+                Log.d("button ", " 15j");
+                break;
+            case R.id.button_30j :
+                graphView.removeAllSeries();
+                graphView.onDataChanged(true,true);
+                period  = "30";
+                initGraph(graphView,"30");
+                Log.d("button ", " 30j");
+                break;
+        }
+    }
 }
