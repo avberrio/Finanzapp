@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.aldo.finanzapp.models.Bills;
 import com.example.aldo.finanzapp.models.BillsDAO;
@@ -46,6 +47,17 @@ public class ListarCuentas extends AppCompatActivity implements AdapterView.OnIt
         newAdapter = new MyClassAdapter(this, billsList);
         listView = (ListView) findViewById(R.id.myListView);
         listView.setAdapter(newAdapter);
+
+        int amount = 0;
+        String date = "2016-11-21";
+        for (Iterator<Bills> it = billsList.iterator(); it.hasNext();){
+            Bills itg = (Bills) it.next();
+            amount += Integer.parseInt(itg.getAmount());
+        }
+
+        TextView totalToPay = (TextView) findViewById(R.id.total_to_pay);
+        totalToPay.setText("Hasta el Y, el total a pagar son "+amount);
+
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
         newAdapter.notifyDataSetChanged();
